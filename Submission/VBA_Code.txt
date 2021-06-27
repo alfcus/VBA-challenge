@@ -7,6 +7,7 @@ Sub StockAnalysis():
     Dim lastClose As Double
     Dim yearlyChange As Double
     Dim percentChange As Double
+    Dim percChgConv As String
     Dim totalVolume As Double
         
     j = 1
@@ -20,6 +21,7 @@ Sub StockAnalysis():
             firstOpen = Cells(i, 3).Value
        End If
                     
+       ' Next row check for total volume calculation
        If Cells(i + 1, 1).Value = Cells(i, 1).Value Then
             totalVolume = totalVolume + Cells(i, 7).Value
        Else
@@ -28,7 +30,8 @@ Sub StockAnalysis():
             
             ' Change calculations
             yearlyChange = lastClose - firstOpen
-            percentChange = 100 * (yearlyChange / firstOpen)
+            percentChange = (yearlyChange / firstOpen)
+            percChgConv = FormatPercent(percentChange)
             
             ' Add summary table header when working with multiple worksheets
             If j = 1 Then
@@ -42,8 +45,15 @@ Sub StockAnalysis():
             j = j + 1
             Cells(j, 9).Value = Cells(i, 1).Value ' ticker
             Cells(j, 10).Value = yearlyChange
-            Cells(j, 11).Value = percentChange
+            Cells(j, 11).Value = percChgConv
             Cells(j, 12).Value = totalVolume
+            
+            ' Conditional formatting cell colors
+            If (yearlyChange < 0) Then
+                Cells(j, 10).Interior.ColorIndex = 3 ' Color cell red
+            Else
+                Cells(j, 10).Interior.ColorIndex = 4 ' Color cell green
+            End If
             
             ' Value resets
             firstOpen = Cells(i + 1, 3).Value
