@@ -16,6 +16,14 @@ Sub StockAnalysis():
        Else
             totalVolume = totalVolume + Cells(i, 7)
             
+            ' Add summary table header when working across multiple worksheets
+            If j = 1 Then
+                Cells(j, 9).Value = "Ticker"
+                Cells(j, 10).Value = "Yearly Change"
+                Cells(j, 11).Value = "Percent Change"
+                Cells(j, 12).Value = "Total Stock Volume"
+            End If
+            
             ' Post ticker and total volume to summary table
             j = j + 1
             Cells(j, 9).Value = Cells(i, 1).Value
