@@ -9,15 +9,18 @@ Sub StockAnalysis():
     Dim percentChange As Double
     Dim percChgConv As String
     Dim totalVolume As Double
+    Dim lastRow As Double
     Dim ws As Worksheet
         
-    j = 1
-    totalVolume = 0
-    
+    ' Working through multiple worksheets
     For Each ws In Worksheets
-    
+        
+        lastRow = ws.UsedRange.Rows.Count
+        j = 1
+        totalVolume = 0
+        
         ' Gather data for summary table
-        For i = 2 To 36112
+        For i = 2 To lastRow
             
            ' Record initial opening price on new worksheets
            If i = 2 Then
@@ -33,7 +36,16 @@ Sub StockAnalysis():
                 
                 ' Change calculations
                 yearlyChange = lastClose - firstOpen
-                percentChange = (yearlyChange / firstOpen)
+                
+                If (firstOpen <> 0) Then
+                    percentChange = (yearlyChange / firstOpen)
+                ElseIf (yearlyChange = 0) Then
+                    percentChange = 0.00000001
+                Else
+                    firstOpen = 1
+                    percentChange = (yearlyChange / firstOpen)
+                End If
+                
                 percChgConv = FormatPercent(percentChange)
                 
                 ' Add summary table header when working with multiple worksheets
@@ -71,8 +83,8 @@ Sub StockAnalysis():
                     ws.Range("O2").Value = ws.Cells(i, 1).Value
                     ws.Range("P2").Value = percentChange
                 ElseIf (percentChange < ws.Range("P3").Value) Then
-                        ws.Range("O3").Value = ws.Cells(i, 1).Value
-                        ws.Range("P3").Value = percentChange
+                    ws.Range("O3").Value = ws.Cells(i, 1).Value
+                    ws.Range("P3").Value = percentChange
                 End If
                             
                 If (totalVolume > ws.Range("P4").Value) Then
@@ -86,9 +98,6 @@ Sub StockAnalysis():
            End If
         
         Next i
-        
-        ' Reset summary table counter before going to next worksheet
-        j = 1
        
     Next
     
