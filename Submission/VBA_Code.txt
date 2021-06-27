@@ -1,20 +1,24 @@
 Sub StockAnalysis():
 
     ' Setting intial variables
-    Dim i As Integer
+    Dim i As Long
     Dim j As Integer
+    Dim k As Integer
     Dim firstOpen As Double
     Dim lastClose As Double
     Dim yearlyChange As Double
     Dim percentChange As Double
     Dim percChgConv As String
     Dim totalVolume As Double
+    Dim wsCount As Integer
         
     j = 1
     totalVolume = 0
     
+    wsCount = ActiveWorkbook.Worksheets.Count
+    
     ' Gather data for summary table
-    For i = 2 To 526
+    For i = 2 To 36112
         
        ' Record initial opening price on new worksheets
        If i = 2 Then
@@ -39,6 +43,11 @@ Sub StockAnalysis():
                 Cells(j, 10).Value = "Yearly Change"
                 Cells(j, 11).Value = "Percent Change"
                 Cells(j, 12).Value = "Total Stock Volume"
+                Cells(j, 15).Value = "Ticker"
+                Cells(j, 16).Value = "Value"
+                Range("N2").Value = "Greatest % Increase"
+                Range("N3").Value = "Greatest % Decrease"
+                Range("N4").Value = "Greatest Total Volume"
             End If
             
             ' Post data to summary table
@@ -53,6 +62,23 @@ Sub StockAnalysis():
                 Cells(j, 10).Interior.ColorIndex = 3 ' Color cell red
             Else
                 Cells(j, 10).Interior.ColorIndex = 4 ' Color cell green
+            End If
+            
+            ' "Greatest" summary table update
+            Range("P2").NumberFormat = "0.00%"
+            Range("P3").NumberFormat = "0.00%"
+            
+            If (percentChange > Range("P2").Value) Then
+                Range("O2").Value = Cells(i, 1).Value
+                Range("P2").Value = percentChange
+            ElseIf (percentChange < Range("P3").Value) Then
+                    Range("O3").Value = Cells(i, 1).Value
+                    Range("P3").Value = percentChange
+            End If
+                        
+            If (totalVolume > Range("P4").Value) Then
+                Range("O4").Value = Cells(i, 1).Value
+                Range("P4").Value = totalVolume
             End If
             
             ' Value resets
