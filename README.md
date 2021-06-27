@@ -1,2 +1,2 @@
 # VBA-challenge
-SMU DS Bootcamp VBA Scripting Homework
+SMU Data Science Bootcamp VBA Scripting Homework
