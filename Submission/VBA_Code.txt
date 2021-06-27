@@ -1,0 +1,30 @@
+Sub StockAnalysis():
+
+    ' Setting intial variables
+    Dim i As Integer
+    Dim j As Integer
+    Dim totalVolume As Double
+        
+    j = 1
+    totalVolume = 0
+    
+    ' Gather data for ticker total volume
+    For i = 2 To 526
+        
+       If Cells(i + 1, 1).Value = Cells(i, 1).Value Then
+            totalVolume = totalVolume + Cells(i, 7)
+       Else
+            totalVolume = totalVolume + Cells(i, 7)
+            
+            ' Post ticker and total volume to summary table
+            j = j + 1
+            Cells(j, 9).Value = Cells(i, 1).Value
+            Cells(j, 12).Value = totalVolume
+            
+            ' Reset total volume
+            totalVolume = 0
+       End If
+    
+    Next i
+
+End Sub
